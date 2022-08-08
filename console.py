@@ -130,7 +130,7 @@ class HBNBCommand(cmd.Cmd):
                 """remove the '"' from the beggining and the end of the string"""
                 if value[1][0] == "\"":
                     value[1] = value[1][:0] + "" + value[1][1:]
-                if value[1][len(value[1]) - 1]:
+                if value[1][len(value[1]) - 1] == "\"":
                     value[1] = value[1][:len(value[1]) - 1] + ""
                 """replace '_' with space"""
                 value[1] = value[1].replace("_", " ")
