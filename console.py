@@ -2,7 +2,6 @@
 """ Console Module """
 import cmd
 import sys
-import json
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -20,16 +19,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-        'BaseModel': BaseModel, 'User': User, 'Place': Place,
-        'State': State, 'City': City, 'Amenity': Amenity,
-        'Review': Review
-    }
+               'BaseModel': BaseModel, 'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review
+              }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-        'number_rooms': int, 'number_bathrooms': int,
-        'max_guest': int, 'price_by_night': int,
-        'latitude': float, 'longitude': float
-    }
+             'number_rooms': int, 'number_bathrooms': int,
+             'max_guest': int, 'price_by_night': int,
+             'latitude': float, 'longitude': float
+            }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -38,6 +37,7 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
+
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
@@ -113,20 +113,52 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    """def do_create(self, args):
+        # Create an object of any class
+        arg = args.split(" ")
+        if not args:
+            print("** class name missing **")
+            return
+        elif arg[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        new_instance = HBNBCommand.classes[arg[0]]()
+        # The option to add a new value to the dictionary
+        for i in range(1, len(arg)):
+            if len(arg) > 1:
+                value = arg[i].split("=")
+                # remove the '"' from the beggining and the end of the string
+                if value[1][0] == "\"":
+                    value[1] = value[1][:0] + "" + value[1][1:]
+                if value[1][len(value[1]) - 1] == "\"":
+                    value[1] = value[1][:len(value[1]) - 1] + ""
+                # replace '_' with space
+                value[1] = value[1].replace("_", " ")
+                # check if the string can be converted to number if yes convert
+                if value[1].isnumeric():
+                    if int(value[1]):
+                        value[1] = int(value[1])
+                    elif float(value[1]):
+                        value[1] = float(value[1])
+                setattr(new_instance, value[0], value[1])
+        storage.save()
+        print(new_instance.id)"""
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
-        arg_list = args.split()
-        class_name = arg_list[0]
-        if class_name not in HBNBCommand.classes:
+        args_l = args.split()
+        clss = args_l[0]
+        if clss not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
 
-        new_instance = HBNBCommand.classes[class_name]()
-        
-        for arg in arg_list[1:]:
+        new_instance = HBNBCommand.classes[clss]()
+        # We receive the parameters like: <key name>=<value>
+        # So we split it set up a dictionary that is going to contain
+        # all valid parameters to be set up as attributes of the new object
+        for arg in args_l[1:]:
             param = arg.split('=')
             key = param[0]
             val = param[1]
@@ -143,47 +175,6 @@ class HBNBCommand(cmd.Cmd):
         new_instance.save()
         print(new_instance.id)
 
-    """
-    def do_create(self, args):
-        # Create an object of any class
-        args = args.split()
-        # print(args)
-        if not args:
-            print("** class name missing **")
-            return
-        elif args[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args[0]]()
-        for i in range(1, len(args)):
-            if (args[i].count("=") == 1):
-                attribute = args[i].split('=')
-                if type(attribute[0] == str):
-                    if (attribute[1].count('"') == 2):
-                        if (attribute[1].count('_') > 0):
-                            attribute[1] = attribute[1].replace('_', ' ')
-                        # self.do_update("{} {} {} {}".format(
-                        #     new_instance.__class__.__name__,
-                        #     new_instance.id, attribute[0], attribute[1]))
-                        new_instance.__dict__.update({
-                            attribute[0]: attribute[1].strip('"')})
-                    elif (attribute[1].replace('.', '', 1).isdigit()
-                            or attribute[1].replace('.', '', 1).replace('-','', 1)):
-                        if attribute[1].isdigit():
-                            new_instance.__dict__.update({
-                                attribute[0]: int(attribute[1])})
-                        else:
-                            new_instance.__dict__.update({
-                                attribute[0]: float(attribute[1])})
-                        # self.do_update("{} {} {} {}".format(
-                        #     new_instance.__class__.__name__,
-                        #     new_instance.id, attribute[0], attribute[1]))
-                    # new_instance.__dict__.update({attribute[0]:attribute[1]})
-        storage.new(new_instance)
-        storage.save()
-        print(new_instance.id)
-    """
-    
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -264,13 +255,16 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+            #for k, v in storage._FileStorage__objects.items():
             for k, v in storage.all(args).items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage.all(args).items():
+            #for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
-        print('[%s]' % ', '.join(map(str, print_list)))
+
+        print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
@@ -292,6 +286,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, args):
         """ Updates a certain object with new info """
         c_name = c_id = att_name = att_val = kwargs = ''
+
         # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
         args = args.partition(" ")
         if args[0]:
@@ -375,7 +370,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
