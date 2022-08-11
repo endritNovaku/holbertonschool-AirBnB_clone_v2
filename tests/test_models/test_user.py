@@ -65,6 +65,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(p.total_errors, 0, "fix pep8")
 
     def test_attributes(self):
+        """Testing attributes"""
         usr = User(email="a", password="a")
         self.assertEqual(str, type(usr.id))
         self.assertEqual(datetime, type(usr.created_at))
@@ -92,6 +93,38 @@ class TestUser(unittest.TestCase):
         """Testing if file has docstring or not"""
         self.assertIsNotNone(User.__doc__)
 
+    def test_is_subclass(self):
+        """Check amenity is sublass of BaseModel"""
+        self.assertTrue(issubclass(User, BaseModel))
+
+    def test_initialize(self):
+        """Test initialization"""
+        self.assertIsInstance(self.user, User)
+
+    def test_to_dict(self):
+        """Test to_dict method."""
+        user_dict = self.user.to_dict()
+        self.assertEqual(dict, type(user_dict))
+        self.assertEqual(self.user.id, user_dict["id"])
+        self.assertEqual("User", user_dict["__class__"])
+        self.assertEqual(self.user.created_at.isoformat(),
+                         user_dict["created_at"])
+        self.assertEqual(self.user.updated_at.isoformat(),
+                         user_dict["updated_at"])
+        self.assertEqual(self.user.email, user_dict["email"])
+        self.assertEqual(self.user.password, user_dict["password"])
+
+    def test_str(self):
+        """Testing str representation method"""
+        s = self.user.__str__()
+        self.assertIn("[User] ({})".format(self.user.id), s)
+        self.assertIn("'id': '{}'".format(self.user.id), s)
+        self.assertIn("'created_at': {}".format(
+            repr(self.user.created_at)), s)
+        self.assertIn("'updated_at': {}".format(
+            repr(self.user.updated_at)), s)
+        self.assertIn("'email': '{}'".format(self.user.email), s)
+        self.assertIn("'password': '{}'".format(self.user.password), s)
 
 if __name__ == "__main__":
     unittest.main()
