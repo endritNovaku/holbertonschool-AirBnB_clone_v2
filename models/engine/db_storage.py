@@ -26,7 +26,7 @@ class DBStorage:
                                               getenv('HBNB_MYSQL_PWD'),
                                               getenv('HBNB_MYSQL_HOST'),
                                               getenv('HBNB_MYSQL_DB')),
-                                       pool_pre_ping=True)
+                                      pool_pre_ping=True)
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(bind=self.__engine)
 
@@ -34,7 +34,7 @@ class DBStorage:
         """Method that queries on the currect database session"""
         objects_dictionary = {}
 
-        if cls == None:
+        if cls is None:
             objects_list = self.__session.query(State).all()
             objects_list.extend(self.__session.query(City).all())
             objects_list.extend(self.__session.query(User).all())
