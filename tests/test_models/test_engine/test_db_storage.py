@@ -38,12 +38,12 @@ class TestDBStorage(unittest.TestCase):
             self.user = User(email="poppy@holberton.com", password="betty")
             self.storage._DBStorage__session.add(self.user)
             self.place = Place(city_id=self.city.id, user_id=self.user.id,
-                              name="School")
+                               name="School")
             self.storage._DBStorage__session.add(self.place)
             self.amenity = Amenity(name="Wifi")
             self.storage._DBStorage__session.add(self.amenity)
             self.review = Review(place_id=self.place.id, user_id=self.user.id,
-                                text="stellar")
+                                 text="stellar")
             self.storage._DBStorage__session.add(self.review)
             self.storage._DBStorage__session.commit()
 
@@ -113,7 +113,6 @@ class TestDBStorage(unittest.TestCase):
 
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
-
     def test_new(self):
         st = State(name="Washington")
         self.storage.new(st)
@@ -149,7 +148,6 @@ class TestDBStorage(unittest.TestCase):
 
     @unittest.skipIf(type(models.storage) == FileStorage,
                      "Testing FileStorage")
-
     def test_reload(self):
         og_session = self.storage._DBStorage__session
         self.storage.reload()
