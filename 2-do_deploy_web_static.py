@@ -3,13 +3,13 @@ from fabric.api import put, run, local, env
 from os import path
 
 
-env.hosts = ["54.167.24.215", "54.82.159.235"]
+env.hosts = ["18.212.240.170", "3.85.22.54"]
 
 
 def do_deploy(archive_path):
     """Fabric script that distributes
     an archive to your web server"""
-    
+
     if not path.exists(archive_path):
         return False
     try:
@@ -23,7 +23,8 @@ def do_deploy(archive_path):
         run("tar -zxvf /tmp/{} -C /data/web_static/releases/{}/"
             .format(tgzfile, filename))
         run("rm /tmp/{}".format(tgzfile))
-        run("mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/".format(filename, filename))
+        run("mv /data/web_static/releases/{}/web_static/*\
+            /data/web_static/releases/{}/".format(filename, filename))
         run("rm -rf /data/web_static/releases/{}/web_static".format(filename))
         run("rm -rf /data/web_static/current")
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
