@@ -6,6 +6,7 @@ from os import path
 
 env.hosts = ["18.212.240.170", "3.85.22.54"]
 
+
 def do_pack():
     """ A script that generates archive the contents of web_static folder"""
 
