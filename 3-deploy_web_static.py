@@ -4,8 +4,8 @@ from time import strftime
 from datetime import date
 from os import path
 
-
 env.hosts = ["18.212.240.170", "3.85.22.54"]
+
 
 def do_pack():
     """ A script that generates archive the contents of web_static folder"""
@@ -20,6 +20,7 @@ def do_pack():
 
     except Exception as e:
         return None
+
 
 def do_deploy(archive_path):
     """Fabric script that distributes
@@ -47,6 +48,7 @@ def do_deploy(archive_path):
         return True
     except Exception as e:
         return False
+
 
 def deploy():
     """run the 2 functions"""
