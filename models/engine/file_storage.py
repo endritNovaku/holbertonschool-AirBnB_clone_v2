@@ -60,7 +60,7 @@ class FileStorage:
     def delete(self, obj=None):
         """Deletes and object from __objects"""
         if (obj):
-            key = f"{type(obj).__name__}.{obj.id}"
+            key = "{}.{}".format(type(obj).__name__, obj.id)
             del self.__objects[key]
 
     def close(self):
