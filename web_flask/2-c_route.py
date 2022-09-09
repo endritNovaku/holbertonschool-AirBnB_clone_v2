@@ -23,7 +23,7 @@ def hbnb():
 def c(text):
     """Displays 'C' followed by the value of <text>."""
     result = text.replace('_', ' ')
-    return f"C {result}"
+    return "C {}".format(result)
 
 
 if __name__ == "__main__":
