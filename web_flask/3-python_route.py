@@ -22,7 +22,7 @@ def hello_hbnb():
 def c_print(text):
     """Function that returns a C string"""
     result = text.replace('_', ' ')
-    return f"C {result}"
+    return "C {}".format(result)
 
 
 @app.route("/python", strict_slashes=False)
@@ -30,7 +30,7 @@ def c_print(text):
 def python_print(text="is cool"):
     """Function that returns a Python string"""
     result = text.replace('_', ' ')
-    return f"Python {result}"
+    return "Python {}".format(result)
 
 
 if __name__ == '__main__':
