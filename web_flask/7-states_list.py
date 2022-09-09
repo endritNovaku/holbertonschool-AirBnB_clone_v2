@@ -7,6 +7,7 @@ from models.state import State
 
 app = Flask(__name__)
 
+
 @app.route("/states_list", strict_slashes=False)
 def display_states():
     """Render state_list html page to display States created"""
