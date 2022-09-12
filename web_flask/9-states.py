@@ -16,14 +16,14 @@ def close(self):
 
 @app.route('/states', strict_slashes=False)
 def state():
-    """Displays a html page with states and cities"""
+    """Displays a html page with states"""
     states = storage.all(State)
     return render_template('9-states.html', states=states)
 
 
 @app.route('/states/<id>', strict_slashes=False)
 def state_by_id(id):
-    """Displays a html page with states and cities"""
+    """Displays a html page with citys of that state"""
     for state in storage.all(State).values():
         if state.id == id:
             return render_template('9-states.html', states=state)
